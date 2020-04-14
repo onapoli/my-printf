@@ -9,6 +9,8 @@ static char	*ft_itoa(int number) //NORMALIZAR Y SEPARAR EN UN ARCHIVO A PARTE
 	int		j;
 	char	*result;
 
+	if (!number)
+		return("0");
 	number2 = number;
 	sign = 0;
 	if (number < 0)
@@ -79,8 +81,9 @@ int	ft_print_number(va_list ap, f_mod_struct *f_mod)
 	fill_char = ' ';
 	if (f_mod->zero && !f_mod->minus)
 	{
-		fill_char = '0';
-		if (*num_char == '-')
+		if (!f_mod->precision)
+			fill_char = '0';
+		if (*num_char == '-' && !f_mod->precision)
 		{
 			prnt_cnt += write(1, "-", 1);
 			num_char++;
@@ -91,13 +94,13 @@ int	ft_print_number(va_list ap, f_mod_struct *f_mod)
 		prnt_cnt += write(1, &fill_char, 1);
 	if (f_mod->precision)
 	{
-		if (*num_char == '-' && !f_mod->zero)
+		if (*num_char == '-' /*&& (!f_mod->zero || f_mod->precision < f_mod->width)*/)
 		{
 			prnt_cnt += write(1, "-", 1);
 			num_char++;
 			str_len--;						
 		}
-		while (f_mod->precision-- - str_len)
+		while ((f_mod->precision-- - str_len) > 0)
 			prnt_cnt += write(1, "0", 1);		
 	}
 	prnt_cnt += write(1, num_char, str_len);
