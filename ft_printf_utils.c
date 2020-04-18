@@ -1,8 +1,8 @@
 #include "ft_printf.h"
 
-int     ft_add_width(int width, char addition)
+int     ft_add_number(int number, char addition)
 {
-	return ((width * 10) + (addition - '0'));
+	return ((number * 10) + (addition - '0'));
 }
 
 int     ft_is_digit(int c)
@@ -35,7 +35,7 @@ int		ft_check_type(char c)
 {
 	char	*types;
 
-	types = "csdi";
+	types = "csdiu";
 	while (*types)
 	{
 		if (*types == c)

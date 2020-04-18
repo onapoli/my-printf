@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static int	ft_process_flags(const char *fmt, va_list ap, f_mod_struct *f_mod)
+static int	ft_process_flag(const char *fmt, va_list ap, f_mod_struct *f_mod)
 {
 	if (*fmt == '-')
 		f_mod->minus = 1;
@@ -13,11 +13,11 @@ static int	ft_process_flags(const char *fmt, va_list ap, f_mod_struct *f_mod)
 		else if (!f_mod->dot && *fmt == '*')
 			f_mod->width = va_arg(ap, int);
 		else if (!f_mod->dot)
-			f_mod->width = ft_add_width(f_mod->width, *fmt);
+			f_mod->width = ft_add_number(f_mod->width, *fmt);
 		else if (*fmt == '*')
 			f_mod->precision = va_arg(ap, int);
 		else
-			f_mod->precision = ft_add_width(f_mod->precision, *fmt);
+			f_mod->precision = ft_add_number(f_mod->precision, *fmt);
 	}
 	return (0); 
 }
@@ -30,17 +30,19 @@ static int	ft_process_type(const char *fmt, va_list ap, f_mod_struct *f_mod, int
 		*print_counter += ft_print_str(ap, f_mod);
 	if (*fmt == 'd' || *fmt == 'i')
 		*print_counter += ft_print_number(ap, f_mod);
+	if (*fmt == 'u')
+		*print_counter += ft_print_unsigned(ap, f_mod);
 	return (0);
 }
 
-static int	ft_check_specifiers(const char *fmt) //PASAR UN char, NO UN pointer
+static int	ft_check_flag_or_type(const char character)
 {
 	char	*specifiers;
 
-	specifiers = "-.*0123456789csdi";
+	specifiers = "-.*0123456789csdiu";
 		while (*specifiers)
 		{
-			if (*specifiers == *fmt)
+			if (*specifiers == character)
 				return (1);
 			specifiers++;
 		}
@@ -53,9 +55,9 @@ static int	ft_format(const char *fmt, va_list ap, f_mod_struct *f_mod, int *prin
 
 	fmt_pos = 0;
 	ft_init_structure(f_mod);
-	while (ft_check_specifiers(fmt))
+	while (ft_check_flag_or_type(*fmt))
 	{		
-		ft_process_flags(fmt, ap, f_mod);
+		ft_process_flag(fmt, ap, f_mod);
 		if (ft_check_type(*fmt))
 		{
 			ft_process_type(fmt, ap, f_mod, print_counter);
@@ -80,10 +82,8 @@ static int	ft_process_arg(const char *fmt, va_list ap, f_mod_struct *f_mod, int 
 		*print_counter += 1;		
 		fmt_pos++;
 	}
-	else if (*fmt && ft_check_specifiers(fmt))
-	{		
-		fmt_pos += ft_format(fmt, ap, f_mod, print_counter);		
-	}
+	else if (*fmt && ft_check_flag_or_type(*fmt))		
+		fmt_pos += ft_format(fmt, ap, f_mod, print_counter);
 	return (fmt_pos);
 }
 

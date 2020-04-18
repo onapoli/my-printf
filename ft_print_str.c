@@ -1,30 +1,57 @@
 #include "ft_printf.h"
 
-int	ft_print_str(va_list ap, f_mod_struct *f_mod)
+static int	left_print(f_mod_struct *f_mod, char *str, int str_len)
+{
+	int		blank_width;
+	char	fill_char;
+	int		prnt_cnt;
+
+	if (f_mod->precision && f_mod->precision < str_len)
+		str_len = f_mod->precision;
+	blank_width = f_mod->width > str_len ? f_mod->width - str_len : 0;
+	fill_char = ' ';
+	if (f_mod->zero)
+		fill_char = '0';
+	prnt_cnt = 0;
+	prnt_cnt += write(1, str, str_len);
+	prnt_cnt += ft_print_repeat(blank_width, fill_char);
+	return (prnt_cnt);
+}
+
+static int	right_print(f_mod_struct *f_mod, char *str, int str_len)
+{
+	int		blank_width;
+	char	fill_char;
+	int		prnt_cnt;
+
+	if (f_mod->precision && f_mod->precision < str_len)
+		str_len = f_mod->precision;
+	blank_width = f_mod->width > str_len ? f_mod->width - str_len : 0;
+	fill_char = ' ';
+	if (f_mod->zero)
+		fill_char = '0';
+	prnt_cnt = 0;
+	prnt_cnt += ft_print_repeat(blank_width, fill_char);
+	prnt_cnt += write(1, str, str_len);
+	return (prnt_cnt);
+}
+
+int			ft_print_str(va_list ap, f_mod_struct *f_mod)
 {
 	char	*str;
 	int		str_len;
-	int		before;
-	int		after;
 	int		prnt_cnt;
 
-	str = va_arg(ap, char *);	
-	str_len = ft_strlen(str);	
+	str = va_arg(ap, char *);
+	str_len = 0;
+	if (str)	
+		str_len = ft_strlen(str);
+	if (f_mod->dot && !f_mod->precision && str_len == 1 && *str == ' ')
+		str_len = 0;
+	prnt_cnt = 0;		
 	if (f_mod->minus)
-	{
-		before = 0;
-		after = f_mod->width - str_len > 0 ? f_mod->width - str_len : 0;
-	}
+		prnt_cnt += left_print(f_mod, str, str_len);
 	else
-	{
-		before = f_mod->width - str_len > 0 ? f_mod->width - str_len : 0;
-		after = 0;
-	}
-	prnt_cnt = 0;
-	while (before--)
-		prnt_cnt += write(1, " ", 1);
-	prnt_cnt += write(1, str, str_len);
-	while (after--)
-		prnt_cnt += write(1, " ", 1);
+		prnt_cnt += right_print(f_mod, str, str_len);
 	return (prnt_cnt);
 }

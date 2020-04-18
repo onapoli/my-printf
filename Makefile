@@ -4,7 +4,10 @@ FT_PRINTF_SRC = ft_printf.c \
 				ft_print_char.c \
 				ft_print_str.c \
 				ft_print_number.c \
-				ft_printf_utils.c
+				ft_print_unsigned.c \
+				ft_printf_utils.c \
+				ft_printf_utils_2.c \
+				ft_printf_itoa.c
 
 OBJ += $(FT_PRINTF_SRC:.c=.o)
 

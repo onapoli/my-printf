@@ -1,110 +1,81 @@
 #include "ft_printf.h"
 
-static char	*ft_itoa(int number) //NORMALIZAR Y SEPARAR EN UN ARCHIVO A PARTE
+static int	print_n_count_sign(char **num_char, int *str_len)
 {
-	int		number2;
-    int		sign;
-	int		digits;
-	int		i;
-	int		j;
-	char	*result;
-
-	if (!number)
-		return("0");
-	number2 = number;
-	sign = 0;
-	if (number < 0)
-	{
-		number *= -1;
-		number2 *= -1;
-		sign = 1;
-	}
-	digits = 0;
-	while (number >= 1)
-	{
-		number = number / 10;
-		digits++;
-	}		
-	result = malloc(sizeof(char) * (digits + sign + 1)); //COMPROBAR ERROR??
-	result[digits + sign] = 0;
-	i = 0;
-	if (sign)
-		result[i++] = '-';
-	while (i < digits + sign)
-	{
-		int tens;
-
-		tens = 1;
-		j = 0;
-		while (j++ < digits - i + sign - 1)
-			tens *= 10;				
-		result[i] = ((number2 / tens) % 10) + '0';		
-		i++;	
-	}
-	return (result);
+	*num_char += 1;
+	*str_len -= 1;
+	return (write(1, "-", 1));
 }
 
-int	ft_print_number(va_list ap, f_mod_struct *f_mod)
+static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len, int sign)
+{
+	int	blank_precision;
+	int blank_width;
+	int	prnt_cnt;
+
+	blank_precision = 0;
+	blank_width = 0;
+	blank_precision = f_mod->precision > (str_len - sign) ? f_mod->precision - str_len + sign : 0;
+	if (f_mod->width > str_len)
+		blank_width = f_mod->width > (f_mod->precision + sign) ? f_mod->width - f_mod->precision - sign : 0;
+	if (blank_width >= str_len)
+		blank_width = f_mod->width - str_len - blank_precision;
+	prnt_cnt = 0;
+	if (*num_char == '-')
+		prnt_cnt += print_n_count_sign(&num_char, &str_len);
+	prnt_cnt += ft_print_repeat(blank_precision, '0');
+	prnt_cnt += write(1, num_char, str_len);
+	prnt_cnt += ft_print_repeat(blank_width, ' ');
+	return (prnt_cnt);
+}
+
+static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len, int sign)
+{
+	int	blank_precision;
+	int blank_width;
+	int	fill_char;
+	int	prnt_cnt;
+
+	blank_precision = 0;
+	blank_width = 0;
+	blank_precision = f_mod->precision > (str_len - sign) ? f_mod->precision - str_len + sign : 0;
+	if (f_mod->width > str_len)
+		blank_width = f_mod->width > (f_mod->precision + sign) ? f_mod->width - f_mod->precision - sign : 0;
+	if (blank_width >= str_len)
+		blank_width = f_mod->width - str_len - blank_precision;
+	fill_char = ' ';
+	prnt_cnt = 0;
+	if (f_mod->zero && !f_mod->dot)
+	{
+		fill_char = '0';
+		prnt_cnt += print_n_count_sign(&num_char, &str_len);
+	}
+	prnt_cnt += ft_print_repeat(blank_width, fill_char);
+	if (*num_char == '-')
+		prnt_cnt += print_n_count_sign(&num_char, &str_len);
+	prnt_cnt += ft_print_repeat(blank_precision, '0');
+	prnt_cnt += write(1, num_char, str_len);
+	return (prnt_cnt);
+}
+
+int			ft_print_number(va_list ap, f_mod_struct *f_mod)
 {
 	int		num;
 	char	*num_char;
 	int		str_len;
+	int		sign;
 	int		prnt_cnt;
-	char	fill_char;
-	int		before;
-	int		after;
 
 	num = va_arg(ap, int);
 	num_char = ft_itoa(num);
-	str_len = ft_strlen(num_char);	
-	if (f_mod->minus)
-	{
-		before = 0;
-		if (f_mod->precision > str_len)
-			after = f_mod->width > f_mod->precision ? f_mod->width - f_mod->precision : 0;
-		else
-			after = f_mod->width > str_len ? f_mod->width - str_len : 0;
-		if (after && f_mod->precision >= str_len && *num_char == '-')
-			after--;
-	}
-	else
-	{
-		if (f_mod->precision > str_len)
-			before = f_mod->width > f_mod->precision ? f_mod->width - f_mod->precision : 0;
-		else
-			before = f_mod->width > str_len ? f_mod->width - str_len : 0;
-		if (before && f_mod->precision >= str_len && *num_char == '-')
-			before--;
-		after = 0;
-	}
+	str_len = ft_strlen(num_char);
+	if (f_mod->dot && !f_mod->precision && !num)
+		str_len = 0;
+	sign = *num_char == '-' ? 1 : 0;
 	prnt_cnt = 0;
-	fill_char = ' ';
-	if (f_mod->zero && !f_mod->minus)
-	{
-		if (!f_mod->precision)
-			fill_char = '0';
-		if (*num_char == '-' && !f_mod->precision)
-		{
-			prnt_cnt += write(1, "-", 1);
-			num_char++;
-			str_len--;						
-		}			
-	}	
-	while (before--)
-		prnt_cnt += write(1, &fill_char, 1);
-	if (f_mod->precision)
-	{
-		if (*num_char == '-' /*&& (!f_mod->zero || f_mod->precision < f_mod->width)*/)
-		{
-			prnt_cnt += write(1, "-", 1);
-			num_char++;
-			str_len--;						
-		}
-		while ((f_mod->precision-- - str_len) > 0)
-			prnt_cnt += write(1, "0", 1);		
-	}
-	prnt_cnt += write(1, num_char, str_len);
-	while (after--)
-		prnt_cnt += write(1, &fill_char, 1);	
+	if (f_mod->minus)
+		prnt_cnt += left_print(f_mod, num_char, str_len, sign);
+	else
+		prnt_cnt += right_print(f_mod, num_char, str_len, sign);	
 	return (prnt_cnt);
 }
