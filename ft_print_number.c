@@ -1,7 +1,9 @@
 #include "ft_printf.h"
 
-static int	print_n_count_sign(char **num_char, int *str_len)
+static int	print_n_count_sign(char **num_char, int *str_len, int sign)
 {
+	if (!sign)
+		return (0);
 	*num_char += 1;
 	*str_len -= 1;
 	return (write(1, "-", 1));
@@ -13,16 +15,11 @@ static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len, int sign
 	int blank_width;
 	int	prnt_cnt;
 
-	blank_precision = 0;
-	blank_width = 0;
 	blank_precision = f_mod->precision > (str_len - sign) ? f_mod->precision - str_len + sign : 0;
-	if (f_mod->width > str_len)
-		blank_width = f_mod->width > (f_mod->precision + sign) ? f_mod->width - f_mod->precision - sign : 0;
-	if (blank_width >= str_len)
-		blank_width = f_mod->width - str_len - blank_precision;
+	blank_width = f_mod->width > (blank_precision + str_len) ? f_mod->width - blank_precision - str_len : 0;
 	prnt_cnt = 0;
 	if (*num_char == '-')
-		prnt_cnt += print_n_count_sign(&num_char, &str_len);
+		prnt_cnt += print_n_count_sign(&num_char, &str_len, sign);
 	prnt_cnt += ft_print_repeat(blank_precision, '0');
 	prnt_cnt += write(1, num_char, str_len);
 	prnt_cnt += ft_print_repeat(blank_width, ' ');
@@ -36,23 +33,18 @@ static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len, int sig
 	int	fill_char;
 	int	prnt_cnt;
 
-	blank_precision = 0;
-	blank_width = 0;
 	blank_precision = f_mod->precision > (str_len - sign) ? f_mod->precision - str_len + sign : 0;
-	if (f_mod->width > str_len)
-		blank_width = f_mod->width > (f_mod->precision + sign) ? f_mod->width - f_mod->precision - sign : 0;
-	if (blank_width >= str_len)
-		blank_width = f_mod->width - str_len - blank_precision;
+	blank_width = f_mod->width > (blank_precision + str_len) ? f_mod->width - blank_precision - str_len : 0;
 	fill_char = ' ';
 	prnt_cnt = 0;
 	if (f_mod->zero && !f_mod->dot)
 	{
 		fill_char = '0';
-		prnt_cnt += print_n_count_sign(&num_char, &str_len);
+		prnt_cnt += print_n_count_sign(&num_char, &str_len, sign);
 	}
 	prnt_cnt += ft_print_repeat(blank_width, fill_char);
 	if (*num_char == '-')
-		prnt_cnt += print_n_count_sign(&num_char, &str_len);
+		prnt_cnt += print_n_count_sign(&num_char, &str_len, sign);
 	prnt_cnt += ft_print_repeat(blank_precision, '0');
 	prnt_cnt += write(1, num_char, str_len);
 	return (prnt_cnt);

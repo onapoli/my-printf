@@ -44,9 +44,10 @@ int			ft_print_str(va_list ap, f_mod_struct *f_mod)
 
 	str = va_arg(ap, char *);
 	str_len = 0;
-	if (str)	
-		str_len = ft_strlen(str);
-	if (f_mod->dot && !f_mod->precision && str_len == 1 && *str == ' ')
+	if (!str)
+		str = "(null)";	
+	str_len = ft_strlen(str);	
+	if (f_mod->dot && !f_mod->precision)
 		str_len = 0;
 	prnt_cnt = 0;		
 	if (f_mod->minus)

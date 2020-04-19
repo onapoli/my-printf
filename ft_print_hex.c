@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len)
+static int  left_print(f_mod_struct *f_mod, char *num_char, int str_len)
 {
 	int	blank_precision;
 	int	blank_width;
@@ -15,7 +15,7 @@ static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len)
 	return (prnt_cnt);
 }
 
-static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len)
+static int  right_print(f_mod_struct *f_mod, char *num_char, int str_len)
 {
 	int	blank_precision;
 	int blank_width;
@@ -34,22 +34,22 @@ static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len)
 	return (prnt_cnt);
 }
 
-int			ft_print_unsigned(va_list ap, f_mod_struct *f_mod)
+int			ft_print_hex(va_list ap, f_mod_struct *f_mod, char hex_type)
 {
-    unsigned int	u;
-	char			*num_char;
-	int				str_len;
-	int				prnt_cnt;
+    unsigned int    h;
+    char            *num_char;
+    int             str_len;
+    int             prnt_cnt;
 
-	u = va_arg(ap, unsigned int);
-	num_char = ft_itoa(u);
-	str_len = ft_strlen(num_char);
-	if (f_mod->dot && !f_mod->precision && !u)
+    h = va_arg(ap, unsigned int);
+    num_char = ft_itox(h, hex_type);
+    str_len = ft_strlen(num_char);
+    if (f_mod->dot && !f_mod->precision && !h)
 		str_len = 0;
-	prnt_cnt = 0;
-	if (f_mod->minus)
+    prnt_cnt = 0;
+    if (f_mod->minus)
 		prnt_cnt += left_print(f_mod, num_char, str_len);
 	else
-		prnt_cnt += right_print(f_mod, num_char, str_len);	
-	return (prnt_cnt);
+		prnt_cnt += right_print(f_mod, num_char, str_len);
+    return (prnt_cnt);
 }

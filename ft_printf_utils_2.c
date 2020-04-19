@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-int ft_print_repeat(int i, char c)
+int			ft_print_repeat(int i, char c)
 {
     int prnt_cnt;
 

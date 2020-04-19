@@ -32,6 +32,12 @@ static int	ft_process_type(const char *fmt, va_list ap, f_mod_struct *f_mod, int
 		*print_counter += ft_print_number(ap, f_mod);
 	if (*fmt == 'u')
 		*print_counter += ft_print_unsigned(ap, f_mod);
+	if (*fmt == 'X')
+		*print_counter += ft_print_hex(ap, f_mod, 'X');
+	if (*fmt == 'x')
+		*print_counter += ft_print_hex(ap, f_mod, 'x');
+	if (*fmt == 'p')
+		*print_counter += ft_print_pointer(ap, f_mod);
 	return (0);
 }
 
@@ -39,7 +45,7 @@ static int	ft_check_flag_or_type(const char character)
 {
 	char	*specifiers;
 
-	specifiers = "-.*0123456789csdiu";
+	specifiers = "-.*0123456789csdiuXxp";
 		while (*specifiers)
 		{
 			if (*specifiers == character)
@@ -49,11 +55,15 @@ static int	ft_check_flag_or_type(const char character)
 	return (0);
 }
 
-static int	ft_format(const char *fmt, va_list ap, f_mod_struct *f_mod, int *print_counter)
+static int	ft_format(const char *fmt, va_list ap, int *print_counter)
 {
-	int	fmt_pos;
+	int				fmt_pos;
+	f_mod_struct	*f_mod;
 
-	fmt_pos = 0;
+	fmt_pos = 1; //PARA INCLUIR LA POSICIÓN DEL %
+	fmt++; //PARA AVANZAR AL CARACTER QUE ESTÁ DESPUÉS DEL %
+	if (!(f_mod = malloc(sizeof(f_mod_struct))))
+		return (-1);
 	ft_init_structure(f_mod);
 	while (ft_check_flag_or_type(*fmt))
 	{		
@@ -66,41 +76,28 @@ static int	ft_format(const char *fmt, va_list ap, f_mod_struct *f_mod, int *prin
 		}				
 		fmt++;
 		fmt_pos++;
-	}			
-	return (fmt_pos);
-}
-
-static int	ft_process_arg(const char *fmt, va_list ap, f_mod_struct *f_mod, int *print_counter)
-{ //FALTA IMPLEMENTAR MANEJO DE ERRORES
-	int	fmt_pos;
-
-	fmt_pos = 1; //PARA INCLUIR LA POSICIÓN DEL %
-	fmt++; //PARA AVANZAR AL CARACTER QUE ESTÁ DESPUÉS DEL %
-	if (*fmt && *fmt == '%')
-	{
-		write(1, &*fmt, 1);		
-		*print_counter += 1;		
-		fmt_pos++;
 	}
-	else if (*fmt && ft_check_flag_or_type(*fmt))		
-		fmt_pos += ft_format(fmt, ap, f_mod, print_counter);
+	free(f_mod);			
 	return (fmt_pos);
 }
 
 int			ft_printf(const char *fmt, ...)
 {
-	va_list ap;
-	f_mod_struct	*f_mod;    
-	int		print_counter;
+	va_list ap;	    
+	int		print_counter;	
 	
-	if (!(f_mod = malloc(sizeof(f_mod_struct))))
-		return (-1);
 	va_start(ap, fmt);	
 	print_counter = 0;
     while (*fmt)
-	{		
-		if (*fmt == '%')
-			fmt += ft_process_arg(&*fmt, ap, f_mod, &print_counter);
+	{
+		if (*fmt == '%' && fmt[1] == '%')
+		{
+			write(1, "%", 1);
+			print_counter++;
+			fmt += 2;
+		}		
+		if (*fmt == '%' && ft_check_flag_or_type(fmt[1]))
+			fmt += ft_format(&*fmt, ap, &print_counter);
 		else
 		{
 			write(1, &*fmt, 1);
@@ -108,7 +105,6 @@ int			ft_printf(const char *fmt, ...)
 			fmt++;
 		}						
 	}
-    va_end(ap);
-	free(f_mod);
+    va_end(ap);	
 	return (print_counter);
 }

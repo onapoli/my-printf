@@ -35,7 +35,7 @@ int		ft_check_type(char c)
 {
 	char	*types;
 
-	types = "csdiu";
+	types = "csdiuXxp";
 	while (*types)
 	{
 		if (*types == c)
