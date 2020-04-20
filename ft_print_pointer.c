@@ -6,7 +6,7 @@ static int  left_print(f_mod_struct *f_mod, char *p_char, int str_len)
 	int	blank_width;
 	int	prnt_cnt;
 
-	blank_precision = f_mod->precision > (str_len + 2) ? f_mod->precision - (str_len + 2) : 0;
+	blank_precision = f_mod->precision > str_len ? f_mod->precision - str_len : 0;
 	blank_width = f_mod->width > (blank_precision + (str_len + 2)) ? f_mod->width - blank_precision - (str_len + 2) : 0;
 	prnt_cnt = 0;
 	prnt_cnt += ft_print_repeat(blank_precision, '0');
@@ -23,7 +23,7 @@ static int  right_print(f_mod_struct *f_mod, char *p_char, int str_len)
 	int	fill_char;
 	int	prnt_cnt;
 
-	blank_precision = f_mod->precision > (str_len + 2) ? f_mod->precision - (str_len + 2) : 0;
+	blank_precision = f_mod->precision > str_len ? f_mod->precision - str_len : 0;
 	blank_width = f_mod->width > (blank_precision + (str_len + 2)) ? f_mod->width - blank_precision - (str_len + 2) : 0;
 	fill_char = ' ';	
 	if (f_mod->zero && !f_mod->dot)
