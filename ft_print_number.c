@@ -68,6 +68,7 @@ int			ft_print_number(va_list ap, f_mod_struct *f_mod)
 	if (f_mod->minus)
 		prnt_cnt += left_print(f_mod, num_char, str_len, sign);
 	else
-		prnt_cnt += right_print(f_mod, num_char, str_len, sign);	
+		prnt_cnt += right_print(f_mod, num_char, str_len, sign);
+	free(num_char);	
 	return (prnt_cnt);
 }

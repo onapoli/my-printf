@@ -51,5 +51,6 @@ int			ft_print_hex(va_list ap, f_mod_struct *f_mod, char hex_type)
 		prnt_cnt += left_print(f_mod, num_char, str_len);
 	else
 		prnt_cnt += right_print(f_mod, num_char, str_len);
+	free(num_char);
     return (prnt_cnt);
 }

@@ -1,5 +1,4 @@
 #include "ft_printf.h"
-#include <stdio.h>
 
 static int  left_print(f_mod_struct *f_mod, char *p_char, int str_len)
 {
@@ -54,5 +53,6 @@ int			ft_print_pointer(va_list ap, f_mod_struct *f_mod)
 		prnt_cnt += left_print(f_mod, p_char, str_len);
 	else
 		prnt_cnt += right_print(f_mod, p_char, str_len);
+	free(p_char);
 	return (prnt_cnt);
 }

@@ -50,6 +50,7 @@ int			ft_print_unsigned(va_list ap, f_mod_struct *f_mod)
 	if (f_mod->minus)
 		prnt_cnt += left_print(f_mod, num_char, str_len);
 	else
-		prnt_cnt += right_print(f_mod, num_char, str_len);	
+		prnt_cnt += right_print(f_mod, num_char, str_len);
+	free(num_char);	
 	return (prnt_cnt);
 }
