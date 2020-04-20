@@ -96,7 +96,7 @@ int			ft_printf(const char *fmt, ...)
 			print_counter++;
 			fmt += 2;
 		}		
-		if (*fmt == '%' && ft_check_flag_or_type(fmt[1]))
+		else if (*fmt == '%' && ft_check_flag_or_type(fmt[1]))
 			fmt += ft_format(&*fmt, ap, &print_counter);
 		else
 		{
