@@ -1,5 +1,4 @@
 #include "ft_printf.h"
-#include <stdio.h>
 
 static int	ft_process_flag(const char *fmt, va_list ap, f_mod_struct *f_mod)
 {
@@ -108,15 +107,4 @@ int			ft_printf(const char *fmt, ...)
 	}
     va_end(ap);	
 	return (print_counter);
-}
-
-int			main(void)
-{
-	//char	c = 'o';
-	char	*s = "hola";
-	//int		d = 299;		
-	
-	printf("printed chars: %d\n", ft_printf("\%15s", s));
-	//printf("original: %15p", &d);	
-	return (0);
 }
