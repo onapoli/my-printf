@@ -8,8 +8,8 @@ FT_PRINTF_SRC = ft_printf.c \
 				ft_print_hex.c \
 				ft_print_pointer.c \
 				ft_print_empty.c \
+				ft_print_percent.c \
 				ft_printf_utils.c \
-				ft_printf_utils_2.c \
 				ft_printf_itoa.c \
 				ft_printf_itox.c
 

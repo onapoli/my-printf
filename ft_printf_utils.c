@@ -31,16 +31,12 @@ int		ft_strlen(char *str)
 	return (i);
 }
 
-/*int		ft_check_type(char c)
+int		ft_print_repeat(int i, char c)
 {
-	char	*types;
+    int prnt_cnt;
 
-	types = "csdiuXxp";
-	while (*types)
-	{
-		if (*types == c)
-			return (1);
-		types++;
-	}
-	return (0);
-}*/
+    prnt_cnt = 0;
+    while (i--)
+		prnt_cnt += write(1, &c, 1);
+    return (prnt_cnt);
+}

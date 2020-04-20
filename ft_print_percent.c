@@ -6,10 +6,11 @@ static int	left_print(f_mod_struct *f_mod)
 	int blank_width;
 	int	prnt_cnt;
 
-	blank_precision = f_mod->precision;
-	blank_width = f_mod->width > blank_precision ? f_mod->width - blank_precision : 0;
+	blank_precision = f_mod->precision > 1 ? f_mod->precision - 1: 0;
+	blank_width = f_mod->width > (blank_precision + 1) ? f_mod->width - (blank_precision + 1) : 0;
 	prnt_cnt = 0;
-	prnt_cnt += ft_print_repeat(blank_precision, '0');
+    prnt_cnt += ft_print_repeat(blank_precision, '0');
+    prnt_cnt += write(1, "%", 1);
 	prnt_cnt += ft_print_repeat(blank_width, ' ');		
 	return (prnt_cnt);
 }
@@ -21,18 +22,19 @@ static int	right_print(f_mod_struct *f_mod)
 	char	fill_char;
 	int	prnt_cnt;
 
-	blank_precision = f_mod->precision;
-	blank_width = f_mod->width > blank_precision ? f_mod->width - blank_precision : 0;
+	blank_precision = f_mod->precision > 1 ? f_mod->precision - 1: 0;
+	blank_width = f_mod->width > (blank_precision + 1) ? f_mod->width - (blank_precision + 1) : 0;
 	fill_char = ' ';
 	if (f_mod->zero && !f_mod->dot)
 		fill_char = '0';
-	prnt_cnt = 0;
+	prnt_cnt = 0;	
 	prnt_cnt += ft_print_repeat(blank_width, fill_char);
-	prnt_cnt += ft_print_repeat(blank_precision, '0');	
+    prnt_cnt += ft_print_repeat(blank_precision, '0');
+    prnt_cnt += write(1, "%", 1);
 	return (prnt_cnt);
 }
 
-int			ft_print_empty(f_mod_struct *f_mod)
+int			ft_print_percent(f_mod_struct *f_mod)
 {
 	int	prnt_cnt;
 

@@ -38,24 +38,12 @@ static int	ft_process_type(const char *fmt, va_list ap, f_mod_struct *f_mod, int
 		*print_counter += ft_print_hex(ap, f_mod, 'x');
 	else if (*fmt == 'p')
 		*print_counter += ft_print_pointer(ap, f_mod);
+	else if (*fmt == '%')
+		*print_counter += ft_print_percent(f_mod);
 	else
-		*print_counter += ft_print_empty(/*ap, */f_mod);	
+		*print_counter += ft_print_empty(f_mod);	
 	return (0);
 }
-
-/*static int	ft_check_flag_or_type(const char character)
-{
-	char	*specifiers;
-
-	specifiers = "-.*0123456789csdiuXxp";
-		while (*specifiers)
-		{
-			if (*specifiers == character)
-				return (1);
-			specifiers++;
-		}
-	return (0);
-}*/
 
 static int	ft_check_char_in_str(char c, char *str)
 {
@@ -85,7 +73,7 @@ static int	ft_format(const char *fmt, va_list ap, int *print_counter)
 		fmt_pos++;
 	}
 	ft_process_type(fmt, ap, f_mod, print_counter);
-	if (ft_check_char_in_str(*fmt, "csdiuXxp"))
+	if (ft_check_char_in_str(*fmt, "csdiuXxp%"))
 		fmt_pos++;
 	free(f_mod);			
 	return (fmt_pos);
