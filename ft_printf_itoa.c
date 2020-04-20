@@ -1,5 +1,24 @@
 #include "ft_printf.h"
 
+static char *str_cpy(char *src)
+{
+	int		i;
+	int		src_len;
+	char	*cpy;
+
+	src_len = ft_strlen(src);
+	if (!(cpy = malloc(sizeof(char) * (src_len + 1))))
+		return (0);
+	cpy[src_len] = 0;
+	i = 0;
+	while (i < src_len)
+	{
+		cpy[i] = src[i];
+		i++;
+	}
+	return (cpy); 
+}
+
 static char *fill_char_num(long int number2, int sign, int digits)
 {
     char *result;
@@ -34,7 +53,7 @@ char        *ft_itoa(long int number)
 	int			digits;
 
 	if (!number)
-		return ("0");
+		return (str_cpy("0"));
 	number2 = number;
 	sign = 0;
 	if (number < 0)

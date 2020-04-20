@@ -31,7 +31,7 @@ int		ft_strlen(char *str)
 	return (i);
 }
 
-int		ft_check_type(char c)
+/*int		ft_check_type(char c)
 {
 	char	*types;
 
@@ -43,4 +43,4 @@ int		ft_check_type(char c)
 		types++;
 	}
 	return (0);
-}
+}*/

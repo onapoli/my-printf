@@ -9,8 +9,8 @@ static int  left_print(f_mod_struct *f_mod, char *p_char, int str_len)
 	blank_precision = f_mod->precision > str_len ? f_mod->precision - str_len : 0;
 	blank_width = f_mod->width > (blank_precision + (str_len + 2)) ? f_mod->width - blank_precision - (str_len + 2) : 0;
 	prnt_cnt = 0;
-	prnt_cnt += ft_print_repeat(blank_precision, '0');
 	prnt_cnt += write(1, "0x", 2);
+	prnt_cnt += ft_print_repeat(blank_precision, '0');	
 	prnt_cnt += write(1, p_char, str_len);
 	prnt_cnt += ft_print_repeat(blank_width, ' ');
 	return (prnt_cnt);
@@ -30,8 +30,8 @@ static int  right_print(f_mod_struct *f_mod, char *p_char, int str_len)
 		fill_char = '0';
 	prnt_cnt = 0;
 	prnt_cnt += ft_print_repeat(blank_width, fill_char);
-	prnt_cnt += ft_print_repeat(blank_precision, '0');
 	prnt_cnt += write(1, "0x", 2);
+	prnt_cnt += ft_print_repeat(blank_precision, '0');	
 	prnt_cnt += write(1, p_char, str_len);
 	return (prnt_cnt);
 }

@@ -26,22 +26,24 @@ static int	ft_process_type(const char *fmt, va_list ap, f_mod_struct *f_mod, int
 {
 	if (*fmt == 'c')			
 		*print_counter += ft_print_char(ap, f_mod);
-	if (*fmt == 's')
+	else if (*fmt == 's')
 		*print_counter += ft_print_str(ap, f_mod);
-	if (*fmt == 'd' || *fmt == 'i')
+	else if (*fmt == 'd' || *fmt == 'i')
 		*print_counter += ft_print_number(ap, f_mod);
-	if (*fmt == 'u')
+	else if (*fmt == 'u')
 		*print_counter += ft_print_unsigned(ap, f_mod);
-	if (*fmt == 'X')
+	else if (*fmt == 'X')
 		*print_counter += ft_print_hex(ap, f_mod, 'X');
-	if (*fmt == 'x')
+	else if (*fmt == 'x')
 		*print_counter += ft_print_hex(ap, f_mod, 'x');
-	if (*fmt == 'p')
+	else if (*fmt == 'p')
 		*print_counter += ft_print_pointer(ap, f_mod);
+	else
+		*print_counter += ft_print_empty(/*ap, */f_mod);	
 	return (0);
 }
 
-static int	ft_check_flag_or_type(const char character)
+/*static int	ft_check_flag_or_type(const char character)
 {
 	char	*specifiers;
 
@@ -52,6 +54,17 @@ static int	ft_check_flag_or_type(const char character)
 				return (1);
 			specifiers++;
 		}
+	return (0);
+}*/
+
+static int	ft_check_char_in_str(char c, char *str)
+{
+	while (*str)
+	{
+		if (*str == c)
+			return (1);
+		str++;
+	}
 	return (0);
 }
 
@@ -65,18 +78,15 @@ static int	ft_format(const char *fmt, va_list ap, int *print_counter)
 	if (!(f_mod = malloc(sizeof(f_mod_struct))))
 		return (-1);
 	ft_init_structure(f_mod);
-	while (ft_check_flag_or_type(*fmt))
+	while (ft_check_char_in_str( *fmt, "-.*0123456789"))
 	{		
-		ft_process_flag(fmt, ap, f_mod);
-		if (ft_check_type(*fmt))
-		{
-			ft_process_type(fmt, ap, f_mod, print_counter);
-			fmt_pos++;
-			break ;
-		}				
+		ft_process_flag(fmt, ap, f_mod);						
 		fmt++;
 		fmt_pos++;
 	}
+	ft_process_type(fmt, ap, f_mod, print_counter);
+	if (ft_check_char_in_str(*fmt, "csdiuXxp"))
+		fmt_pos++;
 	free(f_mod);			
 	return (fmt_pos);
 }
@@ -96,7 +106,7 @@ int			ft_printf(const char *fmt, ...)
 			print_counter++;
 			fmt += 2;
 		}		
-		else if (*fmt == '%' && ft_check_flag_or_type(fmt[1]))
+		else if (*fmt == '%' && ft_check_char_in_str(fmt[1], "-.*0123456789csdiuXxp"))
 			fmt += ft_format(&*fmt, ap, &print_counter);
 		else
 		{
