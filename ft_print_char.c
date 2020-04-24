@@ -28,3 +28,4 @@ int	ft_print_char(va_list ap, f_mod_struct *f_mod)
 		prnt_cnt += write(1, " ", 1);
 	return (prnt_cnt);
 }
+
