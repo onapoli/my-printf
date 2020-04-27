@@ -18,6 +18,11 @@ static int	ft_process_flag(const char *fmt, va_list ap, f_mod_struct *f_mod)
 			f_mod->precision = va_arg(ap, int);
 		else
 			f_mod->precision = ft_add_number(f_mod->precision, *fmt);
+		if (*fmt == '*' && (f_mod->width < 0 || f_mod->precision < 0))
+			f_mod->minus = 1;		
+		f_mod->dot = f_mod->precision < 0 ? 0 : f_mod->dot;
+		f_mod->width = f_mod->width < 0 ? f_mod->width * -1 : f_mod->width;
+		f_mod->precision = f_mod->precision < 0 ? 0 : f_mod->precision;
 	}
 	return (0); 
 }

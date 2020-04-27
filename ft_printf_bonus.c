@@ -2,15 +2,12 @@
 
 static int	ft_process_flag(const char *fmt, va_list ap, f_mod_struct *f_mod)
 {
-	if (*fmt == '-')
-		f_mod->minus = 1;
-	if (*fmt == '.')
-		f_mod->dot = 1;
-	if (*fmt == '#')
-		f_mod->hash = 1;
-	f_mod->plus = *fmt == '+' ? 1 : 0;
-	f_mod->l = *fmt == 'l' ? 1 : 0;
-	f_mod->space = *fmt == ' ' ? 1 : 0;
+	f_mod->minus = *fmt == '-' ? 1 : f_mod->minus;
+	f_mod->dot = *fmt == '.' ? 1 : f_mod->dot;
+	f_mod->hash = *fmt == '#' ? 1 : f_mod->hash;
+	f_mod->plus = *fmt == '+' ? 1 : f_mod->plus;
+	f_mod->l = *fmt == 'l' ? 1 : f_mod->l;
+	f_mod->space = *fmt == ' ' ? 1 : f_mod->space;
 	if (ft_is_digit(*fmt) || *fmt == '*')
 	{
 		if (*fmt == '0' && !f_mod->zero && !f_mod->width && !f_mod->dot)
@@ -23,6 +20,11 @@ static int	ft_process_flag(const char *fmt, va_list ap, f_mod_struct *f_mod)
 			f_mod->precision = va_arg(ap, int);
 		else
 			f_mod->precision = ft_add_number(f_mod->precision, *fmt);
+		if (*fmt == '*' && (f_mod->width < 0 || f_mod->precision < 0))
+			f_mod->minus = 1;		
+		f_mod->dot = f_mod->precision < 0 ? 0 : f_mod->dot;
+		f_mod->width = f_mod->width < 0 ? f_mod->width * -1 : f_mod->width;
+		f_mod->precision = f_mod->precision < 0 ? 0 : f_mod->precision;
 	}
 	return (0); 
 }

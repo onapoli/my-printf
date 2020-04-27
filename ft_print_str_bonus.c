@@ -3,18 +3,14 @@
 static int	left_print(f_mod_struct *f_mod, char *str, int str_len)
 {
 	int		blank_width;
-	char	fill_char;
 	int		prnt_cnt;
 
 	if (f_mod->precision && f_mod->precision < str_len)
 		str_len = f_mod->precision;
 	blank_width = f_mod->width > str_len ? f_mod->width - str_len : 0;
-	fill_char = ' ';
-	if (f_mod->zero)
-		fill_char = '0';
 	prnt_cnt = 0;
 	prnt_cnt += write(1, str, str_len);
-	prnt_cnt += ft_print_repeat(blank_width, fill_char);
+	prnt_cnt += ft_print_repeat(blank_width, ' ');
 	return (prnt_cnt);
 }
 
