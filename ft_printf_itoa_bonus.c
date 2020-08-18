@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_itoa_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:47:40 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:47:43 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/17 18:02:40 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static char *str_cpy(char *src)
+static char	*str_cpy(char *src)
 {
 	int		i;
 	int		src_len;
@@ -28,40 +28,39 @@ static char *str_cpy(char *src)
 		cpy[i] = src[i];
 		i++;
 	}
-	return (cpy); 
+	return (cpy);
 }
 
-static char *fill_char_num(long int number2, int sign, int digits)
+static char	*fill_char_num(long int number2, int sign, int digits)
 {
-    char *result;
-    int i;
-    int j;
+	char	*result;
+	int		i;
+	int		j;
+	int		decimals;
+	char	conversion;
 
-    result = malloc(sizeof(char) * (digits + sign + 1)); //COMPROBAR ERROR??
+	result = malloc(sizeof(char) * (digits + sign + 1));
 	result[digits + sign] = 0;
-    i = 0;
-    if (sign)
-		result[i++] = '-';    
+	i = 0;
+	if (sign)
+		result[i++] = '-';
 	while (i < digits + sign)
 	{
-		int decimals;
-        char conversion;
-
 		decimals = 1;
 		j = 0;
 		while (j++ < digits - i + sign - 1)
 			decimals *= 10;
-        conversion = ((number2 / decimals) % 10) + '0';        				
-		result[i] = conversion;        		
-		i++;	
+		conversion = ((number2 / decimals) % 10) + '0';
+		result[i] = conversion;
+		i++;
 	}
-    return (result);
+	return (result);
 }
 
-char        *ft_itoa(long int number)
+char		*ft_itoa(long int number)
 {
 	long int	number2;
-    int			sign;
+	int			sign;
 	int			digits;
 
 	if (!number)
@@ -80,5 +79,5 @@ char        *ft_itoa(long int number)
 		number = number / 10;
 		digits++;
 	}
-    return (fill_char_num(number2, sign, digits));
+	return (fill_char_num(number2, sign, digits));
 }

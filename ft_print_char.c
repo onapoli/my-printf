@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:59:01 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:59:03 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/18 12:03:33 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_print_char(va_list ap, f_mod_struct *f_mod)
+int	ft_print_char(va_list ap, t_modifier *f_mod)
 {
 	int	c;
 	int	before;
@@ -40,4 +40,3 @@ int	ft_print_char(va_list ap, f_mod_struct *f_mod)
 		prnt_cnt += write(1, " ", 1);
 	return (prnt_cnt);
 }
-

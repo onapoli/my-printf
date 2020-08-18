@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:42:44 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:43:04 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/18 12:03:05 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,30 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-typedef struct  s_struct
+typedef struct	s_modifier
 {
-    int minus;
-    int width;
-    int zero;
-    int dot;
-    int precision;
-}               f_mod_struct;
+	int minus;
+	int width;
+	int zero;
+	int dot;
+	int precision;
+}				t_modifier;
 
-char            *ft_itox(unsigned long input, char hex_type);
-char            *ft_itoa(long int number);
-int             ft_print_repeat(int i, char c);
-int		        ft_strlen(char *str);
-void            ft_init_structure(f_mod_struct *f_mod);
-int             ft_is_digit(int c);
-int             ft_add_number(int number, char addition);
-int             ft_print_empty(f_mod_struct *f_mod);
-int             ft_print_percent(f_mod_struct *f_mod);
-int             ft_print_pointer(va_list ap, f_mod_struct *f_mod);
-int             ft_print_hex(va_list ap, f_mod_struct *f_mod, char hex_type);
-int             ft_print_unsigned(va_list ap, f_mod_struct *f_mod);
-int             ft_print_number(va_list ap, f_mod_struct *f_mod);
-int	            ft_print_str(va_list ap, f_mod_struct *f_mod);
-int             ft_print_char(va_list ap, f_mod_struct *f_mod);
-int             ft_printf(const char *fmt, ...);
+char			*ft_itox(unsigned long input, char hex_type);
+char			*ft_itoa(long int number);
+int				ft_print_repeat(int i, char c);
+int				ft_strlen(char *str);
+void			ft_init_structure(t_modifier *f_mod);
+int				ft_is_digit(int c);
+int				ft_add_number(int number, char addition);
+int				ft_print_empty(t_modifier *f_mod);
+int				ft_print_percent(t_modifier *f_mod);
+int				ft_print_pointer(va_list ap, t_modifier *f_mod);
+int				ft_print_hex(va_list ap, t_modifier *f_mod, char hex_type);
+int				ft_print_unsigned(va_list ap, t_modifier *f_mod);
+int				ft_print_number(va_list ap, t_modifier *f_mod);
+int				ft_print_str(va_list ap, t_modifier *f_mod);
+int				ft_print_char(va_list ap, t_modifier *f_mod);
+int				ft_printf(const char *fmt, ...);
 
 #endif

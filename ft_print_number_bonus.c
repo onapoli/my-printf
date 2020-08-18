@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_number_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:57:14 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:57:16 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/18 13:12:53 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static int	print_plus_or_space(f_mod_struct *f_mod, int sign)
+static int	print_plus_or_space(t_modifier *f_mod, int sign)
 {
 	if (sign)
 		return (0);
 	if (f_mod->plus)
-		return(write(1, "+", 1));
+		return (write(1, "+", 1));
 	if (f_mod->space)
-		return(write(1, " ", 1));
+		return (write(1, " ", 1));
 	return (0);
 }
 
@@ -32,7 +32,8 @@ static int	print_n_count_sign(char **num_char, int *str_len, int sign)
 	return (write(1, "-", 1));
 }
 
-static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len, int sign)
+static int	left_print(t_modifier *f_mod, char *num_char, int str_len,
+int sign)
 {
 	int	blank_precision;
 	int blank_width;
@@ -40,7 +41,8 @@ static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len, int sign
 	int	prnt_cnt;
 
 	plus_or_space = !sign ? 1 : 0;
-	blank_precision = f_mod->precision > (str_len - sign) ? f_mod->precision - str_len + sign : 0;
+	blank_precision =
+	f_mod->precision > (str_len - sign) ? f_mod->precision - str_len + sign : 0;
 	blank_width = f_mod->width > (blank_precision + str_len + plus_or_space) ?
 		f_mod->width - blank_precision - str_len - plus_or_space : 0;
 	prnt_cnt = 0;
@@ -53,7 +55,8 @@ static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len, int sign
 	return (prnt_cnt);
 }
 
-static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len, int sign)
+static int	right_print(t_modifier *f_mod, char *num_char, int str_len,
+int sign)
 {
 	int	blank_precision;
 	int blank_width;
@@ -82,20 +85,19 @@ static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len, int sig
 	return (prnt_cnt);
 }
 
-int			ft_print_number(va_list ap, f_mod_struct *f_mod)
+int			ft_print_number(va_list ap, t_modifier *f_mod)
 {
-	int			num;
-	long int	lnum;
+	t_nums		nums;
 	char		*num_char;
 	int			str_len;
 	int			sign;
 	int			prnt_cnt;
 
-	lnum = f_mod->l ? va_arg(ap, long int) : 0;
-	num = !f_mod->l ? va_arg(ap, int) : 0;
-	num_char = f_mod->l ? ft_itoa(lnum) : ft_itoa(num);
+	nums.lnum = f_mod->l ? va_arg(ap, long int) : 0;
+	nums.num = !f_mod->l ? va_arg(ap, int) : 0;
+	num_char = f_mod->l ? ft_itoa(nums.lnum) : ft_itoa(nums.num);
 	str_len = ft_strlen(num_char);
-	if (f_mod->dot && !f_mod->precision && (!num && !lnum))
+	if (f_mod->dot && !f_mod->precision && (!nums.num && !nums.lnum))
 		str_len = 0;
 	sign = *num_char == '-' ? 1 : 0;
 	prnt_cnt = 0;
@@ -103,6 +105,6 @@ int			ft_print_number(va_list ap, f_mod_struct *f_mod)
 		prnt_cnt += left_print(f_mod, num_char, str_len, sign);
 	else
 		prnt_cnt += right_print(f_mod, num_char, str_len, sign);
-	free(num_char);	
+	free(num_char);
 	return (prnt_cnt);
 }

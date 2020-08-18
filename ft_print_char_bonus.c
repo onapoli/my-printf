@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_char_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:59:17 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:59:18 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/18 12:11:05 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static int print_left(f_mod_struct *f_mod, char c)
+static int	print_left(t_modifier *f_mod, char c)
 {
 	int blank_width;
 	int	prnt_cnt;
@@ -24,19 +24,19 @@ static int print_left(f_mod_struct *f_mod, char c)
 	return (prnt_cnt);
 }
 
-static int print_right(f_mod_struct *f_mod, char c)
+static int	print_right(t_modifier *f_mod, char c)
 {
 	int blank_width;
 	int	prnt_cnt;
 
 	blank_width = f_mod->width - 1;
-	prnt_cnt = 0;	
+	prnt_cnt = 0;
 	prnt_cnt += write(1, &c, 1);
 	prnt_cnt += ft_print_repeat(blank_width, ' ');
 	return (prnt_cnt);
 }
 
-int	ft_print_char(va_list ap, f_mod_struct *f_mod)
+int			ft_print_char(va_list ap, t_modifier *f_mod)
 {
 	int		c;
 	wint_t	lc;

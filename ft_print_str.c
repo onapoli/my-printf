@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_str.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:51:28 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:51:31 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/18 12:06:25 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	left_print(f_mod_struct *f_mod, char *str, int str_len)
+static int	left_print(t_modifier *f_mod, char *str, int str_len)
 {
 	int		blank_width;
 	int		prnt_cnt;
@@ -26,7 +26,7 @@ static int	left_print(f_mod_struct *f_mod, char *str, int str_len)
 	return (prnt_cnt);
 }
 
-static int	right_print(f_mod_struct *f_mod, char *str, int str_len)
+static int	right_print(t_modifier *f_mod, char *str, int str_len)
 {
 	int		blank_width;
 	char	fill_char;
@@ -44,7 +44,7 @@ static int	right_print(f_mod_struct *f_mod, char *str, int str_len)
 	return (prnt_cnt);
 }
 
-int			ft_print_str(va_list ap, f_mod_struct *f_mod)
+int			ft_print_str(va_list ap, t_modifier *f_mod)
 {
 	char	*str;
 	int		str_len;
@@ -53,11 +53,11 @@ int			ft_print_str(va_list ap, f_mod_struct *f_mod)
 	str = va_arg(ap, char *);
 	str_len = 0;
 	if (!str)
-		str = "(null)";	
-	str_len = ft_strlen(str);	
+		str = "(null)";
+	str_len = ft_strlen(str);
 	if (f_mod->dot && !f_mod->precision)
 		str_len = 0;
-	prnt_cnt = 0;		
+	prnt_cnt = 0;
 	if (f_mod->minus)
 		prnt_cnt += left_print(f_mod, str, str_len);
 	else

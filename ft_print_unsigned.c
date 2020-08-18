@@ -3,23 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_unsigned.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:49:39 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:49:41 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/18 12:06:45 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len)
+static int	left_print(t_modifier *f_mod, char *num_char, int str_len)
 {
 	int	blank_precision;
 	int	blank_width;
 	int	prnt_cnt;
 
-	blank_precision = f_mod->precision > str_len ? f_mod->precision - str_len : 0;
-	blank_width = f_mod->width > (blank_precision + str_len) ? f_mod->width - blank_precision - str_len : 0;
+	blank_precision =
+	f_mod->precision > str_len ? f_mod->precision - str_len : 0;
+	blank_width =
+	f_mod->width > (blank_precision + str_len) ? f_mod->width -
+	blank_precision - str_len : 0;
 	prnt_cnt = 0;
 	prnt_cnt += ft_print_repeat(blank_precision, '0');
 	prnt_cnt += write(1, num_char, str_len);
@@ -27,16 +30,19 @@ static int	left_print(f_mod_struct *f_mod, char *num_char, int str_len)
 	return (prnt_cnt);
 }
 
-static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len)
+static int	right_print(t_modifier *f_mod, char *num_char, int str_len)
 {
 	int	blank_precision;
 	int blank_width;
 	int	fill_char;
 	int	prnt_cnt;
 
-	blank_precision = f_mod->precision > str_len ? f_mod->precision - str_len : 0;
-	blank_width = f_mod->width > (blank_precision + str_len) ? f_mod->width - blank_precision - str_len : 0;
-	fill_char = ' ';	
+	blank_precision =
+	f_mod->precision > str_len ? f_mod->precision - str_len : 0;
+	blank_width =
+	f_mod->width > (blank_precision + str_len) ? f_mod->width -
+	blank_precision - str_len : 0;
+	fill_char = ' ';
 	if (f_mod->zero && !f_mod->dot)
 		fill_char = '0';
 	prnt_cnt = 0;
@@ -46,9 +52,9 @@ static int	right_print(f_mod_struct *f_mod, char *num_char, int str_len)
 	return (prnt_cnt);
 }
 
-int			ft_print_unsigned(va_list ap, f_mod_struct *f_mod)
+int			ft_print_unsigned(va_list ap, t_modifier *f_mod)
 {
-    unsigned int	u;
+	unsigned int	u;
 	char			*num_char;
 	int				str_len;
 	int				prnt_cnt;
@@ -63,6 +69,6 @@ int			ft_print_unsigned(va_list ap, f_mod_struct *f_mod)
 		prnt_cnt += left_print(f_mod, num_char, str_len);
 	else
 		prnt_cnt += right_print(f_mod, num_char, str_len);
-	free(num_char);	
+	free(num_char);
 	return (prnt_cnt);
 }

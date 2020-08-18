@@ -3,35 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_ref_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onapoli- <onapoli-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:52:06 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/05/29 15:52:08 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/18 12:13:18 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static int  left_print(f_mod_struct *f_mod)
+static int	left_print(t_modifier *f_mod)
 {
 	int blank_width;
 	int	prnt_cnt;
 
-	blank_width = f_mod->width > f_mod->precision ? f_mod->width - f_mod->precision : 0;
+	blank_width =
+	f_mod->width > f_mod->precision ? f_mod->width - f_mod->precision : 0;
 	prnt_cnt = 0;
 	prnt_cnt += ft_print_repeat(f_mod->precision, '0');
-	prnt_cnt += ft_print_repeat(blank_width, ' ');	
+	prnt_cnt += ft_print_repeat(blank_width, ' ');
 	return (prnt_cnt);
 }
 
-static int  right_print(f_mod_struct *f_mod)
+static int	right_print(t_modifier *f_mod)
 {
 	int blank_width;
 	int	fill_char;
 	int	prnt_cnt;
 
-	blank_width = f_mod->width > f_mod->precision ? f_mod->width - f_mod->precision : 0;
-	fill_char = ' ';	
+	blank_width =
+	f_mod->width > f_mod->precision ? f_mod->width - f_mod->precision : 0;
+	fill_char = ' ';
 	if (f_mod->zero && !f_mod->dot)
 		fill_char = '0';
 	prnt_cnt = 0;
@@ -40,7 +42,7 @@ static int  right_print(f_mod_struct *f_mod)
 	return (prnt_cnt);
 }
 
-int	ft_print_ref(va_list ap, f_mod_struct *f_mod, int print_counter)
+int			ft_print_ref(va_list ap, t_modifier *f_mod, int print_counter)
 {
 	unsigned long	u;
 	int				*i;
