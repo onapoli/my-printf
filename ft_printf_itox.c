@@ -6,7 +6,7 @@
 /*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:45:39 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/08/17 18:07:23 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/25 17:06:16 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char hex_type)
 	int				j;
 
 	i = 1;
+	hex_len--;
 	while (hex_len--)
 	{
 		h = input;
@@ -49,6 +50,8 @@ char		*ft_itox(unsigned long input, char hex_type)
 
 	h = input;
 	hex_len = 0;
+	if (h)
+		hex_len++;
 	while (h >= 16)
 	{
 		h /= 16;
@@ -58,6 +61,7 @@ char		*ft_itox(unsigned long input, char hex_type)
 		return (0);
 	hex_char[hex_len] = 0;
 	hex_char[0] = ft_unit_hex_converter(h, hex_type);
-	hex_constructor(input, &hex_char, hex_len, hex_type);
+	if (hex_len > 1)
+		hex_constructor(input, &hex_char, hex_len, hex_type);
 	return (hex_char);
 }

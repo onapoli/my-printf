@@ -6,7 +6,7 @@
 /*   By: onapoli- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/29 15:54:30 by onapoli-          #+#    #+#             */
-/*   Updated: 2020/08/18 12:05:46 by onapoli-         ###   ########.fr       */
+/*   Updated: 2020/08/24 12:36:15 by onapoli-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,11 @@
 
 static int	left_print(t_modifier *f_mod)
 {
-	int	blank_precision;
 	int blank_width;
 	int	prnt_cnt;
 
-	blank_precision = f_mod->precision > 1 ? f_mod->precision - 1 : 0;
-	blank_width =
-	f_mod->width > (blank_precision + 1) ? f_mod->width -
-	(blank_precision + 1) : 0;
+	blank_width = f_mod->width > 1 ? f_mod->width - 1 : 0;
 	prnt_cnt = 0;
-	prnt_cnt += ft_print_repeat(blank_precision, '0');
 	prnt_cnt += write(1, "%", 1);
 	prnt_cnt += ft_print_repeat(blank_width, ' ');
 	return (prnt_cnt);
@@ -31,21 +26,17 @@ static int	left_print(t_modifier *f_mod)
 
 static int	right_print(t_modifier *f_mod)
 {
-	int		blank_precision;
 	int		blank_width;
 	char	fill_char;
 	int		prnt_cnt;
 
-	blank_precision = f_mod->precision > 1 ? f_mod->precision - 1 : 0;
 	blank_width =
-	f_mod->width > (blank_precision + 1) ? f_mod->width -
-	(blank_precision + 1) : 0;
+	f_mod->width > 1 ? f_mod->width - 1 : 0;
 	fill_char = ' ';
-	if (f_mod->zero && !f_mod->dot)
+	if (f_mod->zero)
 		fill_char = '0';
 	prnt_cnt = 0;
 	prnt_cnt += ft_print_repeat(blank_width, fill_char);
-	prnt_cnt += ft_print_repeat(blank_precision, '0');
 	prnt_cnt += write(1, "%", 1);
 	return (prnt_cnt);
 }
